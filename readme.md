@@ -3,7 +3,7 @@
 This first extension for select post best answer
 
 ### Screenshot
-![Screenshot](http://i.imgur.com/nyWtjRX.png) ![Screenshot](http://i.imgur.com/nyWtjRX.png)
+![Screenshot](http://i.imgur.com/nyWtjRX.png)
 
 ### Installation
 ``` bash
