@@ -5,13 +5,13 @@ import PostComponent from 'flarum/components/Post';
 
 export default function() {
     extend(CommentPost.prototype, 'headerItems', function (items) {
-        if (this.props.post.attribute('isBestAnswer')) {
+        if (this.props.post.attribute('isBestAnswer') && !this.props.post.isHidden()) {
             items.add('isBestAnswer', app.translator.trans('flarum-best-answer.forum.header_best_answer'));
         }
     });
 
     extend(PostComponent.prototype, 'attrs', function (attrs) {
-        if (this.props.post.attribute('isBestAnswer')) {
+        if (this.props.post.attribute('isBestAnswer') && !this.props.post.isHidden()) {
             attrs.className += ' Post--best-answer';
         }
     });
