@@ -33,18 +33,15 @@ class SelectBestAnswers
                     'is_best_answer' => 1
                 ])->update(['is_best_answer' => 0]);
 
-                $post->is_best_answer = $isBestAnswer;
-                $post->save();
-
-                $post->discussion->is_best_answer = true;
+                $post->discussion->has_best_answer = true;
                 $post->discussion->save();
             } else {
-                $post->is_best_answer = $isBestAnswer;
-                $post->save();
-
-                $post->discussion->is_best_answer = false;
+                $post->discussion->has_best_answer = false;
                 $post->discussion->save();
             }
+
+            $post->is_best_answer = $isBestAnswer;
+            $post->save();
         }
     }
 }
