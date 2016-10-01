@@ -20,7 +20,7 @@ System.register('wiwatSrt/bestAnswer/addBestAnswerAction', ['flarum/extend', 'fl
                 onclick: function onclick() {
                     isBestAnswer = !isBestAnswer;
                     post.save({isBestAnswer: isBestAnswer});
-                    discussion.pushAttributes({isBestAnswer: isBestAnswer});
+                    discussion.pushAttributes({hasBestAnswer: isBestAnswer});
                 }
             }));
         });
@@ -83,7 +83,7 @@ System.register('wiwatSrt/bestAnswer/addBadgeBestAnswer', ['flarum/extend', 'fla
     var extend, app, Discussion, Badge;
     _export('default', function () {
         extend(Discussion.prototype, 'badges', function (items) {
-            if (this.attribute('isBestAnswer') && !items.has('hidden')) {
+            if (this.attribute('hasBestAnswer') && !items.has('hidden')) {
                 items.add('bestAnswer', m(Badge, { type: 'bestAnswer', icon: 'check', label: app.translator.trans('flarum-best-answer.forum.best_answer') }));
             }
         });

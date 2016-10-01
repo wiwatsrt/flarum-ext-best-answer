@@ -22,7 +22,11 @@ class AddPostBestAnswerAttributes
      */
     public function addApiAttributes(PrepareApiAttributes $event)
     {
-        if ($event->isSerializer(DiscussionSerializer::class) || $event->isSerializer(PostSerializer::class)) {
+        if ($event->isSerializer(DiscussionSerializer::class)) {
+            $event->attributes['hasBestAnswer'] = (bool) $event->model->has_best_answer;
+        }
+
+        if ($event->isSerializer(PostSerializer::class)) {
             $event->attributes['isBestAnswer'] = (bool) $event->model->is_best_answer;
         }
     }
