@@ -10,7 +10,7 @@ export default function() {
         var startUserId = discussion.attribute('startUserId');
         var isBestAnswer = post.attribute('isBestAnswer');
 
-        if (post.isHidden() || post.attribute('number') == 1 || startUserId != app.session.user.id()) return;
+        if (post.isHidden() || post.attribute('number') == 1 || !app.session.user || startUserId != app.session.user.id()) return;
 
         items.add('bestAnswer', Button.component({
             children: app.translator.trans(isBestAnswer ? 'flarum-best-answer.forum.remove_best_answer' : 'flarum-best-answer.forum.this_best_answer'),
