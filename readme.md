@@ -12,8 +12,9 @@ composer require wiwatsrt/flarum-ext-best-answer
 ### To Do
 * Can select only 1 post for best answer.
 * Remove action from other post after select best answer.
-* Only owner discussion can select post for best answer.
+* ~~Only owner discussion can select post for best answer.~~
 * show post best answer in first post.
+* ~~Add user rights in AdminCP.~~
 
 ### Links
 
