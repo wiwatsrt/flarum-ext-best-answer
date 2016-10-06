@@ -1,4 +1,7 @@
 flarum-best-answer:
+    admin:
+        permissions:
+            best_answer: => flarum-best-answer.ref.best_answer
     forum:
         this_best_answer: "This Best Answer"
         remove_best_answer: "Remove Best Answer"

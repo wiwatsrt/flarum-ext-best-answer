@@ -25,6 +25,7 @@ class AddPostBestAnswerAttributes
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['hasBestAnswer'] = (bool) $event->model->has_best_answer;
             $event->attributes['startUserId'] = $event->model->start_user_id;
+            $event->attributes['canSelectBestAnswer'] = (bool) $event->actor->can('selectBestAnswer', $event->model);
         }
 
         if ($event->isSerializer(PostSerializer::class)) {
