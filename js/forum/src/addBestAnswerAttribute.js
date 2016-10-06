@@ -6,7 +6,7 @@ import PostComponent from 'flarum/components/Post';
 export default function() {
     extend(CommentPost.prototype, 'headerItems', function (items) {
         if (this.props.post.attribute('isBestAnswer') && !this.props.post.isHidden()) {
-            items.add('isBestAnswer', app.translator.trans('flarum-best-answer.forum.header_best_answer'));
+            items.add('isBestAnswer', app.translator.trans('flarum-best-answer.forum.best_answer_button'));
         }
     });
 

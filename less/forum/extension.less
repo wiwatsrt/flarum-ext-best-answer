@@ -1,8 +1,16 @@
-.Post--best-answer {
-  background-color: #e9f2dd;
+.Post--bestAnswer {
   .item-isBestAnswer {
+    background: #58a400;
     float: right;
-    font-weight: bold;
+    border: 0 none !important;
+    border-radius: 4px;
+    color: white;
+    padding: 2px 5px;
+  }
+  .item-isBestAnswer::before {
+    content: "\f00c";
+    font-family: FontAwesome;
+    padding-right: 4px;
   }
 }
 .Badge--bestAnswer {
