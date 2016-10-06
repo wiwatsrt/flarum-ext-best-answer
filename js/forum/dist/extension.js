@@ -83,8 +83,12 @@ System.register('wiwatSrt/bestAnswer/addBadgeBestAnswer', ['flarum/extend', 'fla
     var extend, app, Discussion, Badge;
     _export('default', function () {
         extend(Discussion.prototype, 'badges', function (items) {
-            if (this.attribute('hasBestAnswer') && !items.has('hidden')) {
-                items.add('bestAnswer', m(Badge, { type: 'bestAnswer', icon: 'check', label: app.translator.trans('flarum-best-answer.forum.best_answer') }));
+            if (this.hasBestAnswer() && !items.has('hidden')) {
+                items.add('bestAnswer', m(Badge, {
+                    type: 'bestAnswer',
+                    icon: 'check',
+                    label: app.translator.trans('flarum-best-answer.forum.best_answer')
+                }));
             }
         });
     });
@@ -105,16 +109,20 @@ System.register('wiwatSrt/bestAnswer/addBadgeBestAnswer', ['flarum/extend', 'fla
 });
 'use strict';
 
-System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'wiwatSrt/bestAnswer/addBestAnswerAction', 'wiwatSrt/bestAnswer/addBestAnswerAttribute', 'wiwatSrt/bestAnswer/addBadgeBestAnswer'], function (_export, _context) {
+System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'wiwatSrt/bestAnswer/addBestAnswerAction', 'wiwatSrt/bestAnswer/addBestAnswerAttribute', 'wiwatSrt/bestAnswer/addBadgeBestAnswer'], function (_export, _context) {
     "use strict";
 
-    var app, extend, addBestAnswerAction, addBestAnswerAttribute, addBadgeBestAnswer;
+    var app, extend, Model, Discussion, addBestAnswerAction, addBestAnswerAttribute, addBadgeBestAnswer;
 
     return {
         setters: [function (_flarumApp) {
             app = _flarumApp.default;
         }, function (_flarumExtend) {
             extend = _flarumExtend.extend;
+        }, function (_flarumModelsDiscussion) {
+            Discussion = _flarumModelsDiscussion.default;
+        }, function (_flarumModel) {
+            Model = _flarumModel.default;
         }, function (_wiwatSrtBestAnswerAddBestAnswerAction) {
             addBestAnswerAction = _wiwatSrtBestAnswerAddBestAnswerAction.default;
         }, function (_wiwatSrtBestAnswerAddBestAnswerAttribute) {
@@ -125,6 +133,9 @@ System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'wiw
 
         execute: function () {
             app.initializers.add('wiwatSrt-bestAnswer', function () {
+                Discussion.prototype.canSelectBestAnswer = Model.attribute('canSelectBestAnswer');
+                Discussion.prototype.hasBestAnswer = Model.attribute('hasBestAnswer');
+
                 addBadgeBestAnswer();
                 addBestAnswerAttribute();
                 addBestAnswerAction();

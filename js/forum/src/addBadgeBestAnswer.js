@@ -6,7 +6,11 @@ import Badge from 'flarum/components/Badge';
 export default function() {
     extend(Discussion.prototype, 'badges', function (items) {
         if (this.attribute('hasBestAnswer') && !items.has('hidden')) {
-            items.add('bestAnswer', m(Badge, { type: 'bestAnswer', icon: 'check', label: app.translator.trans('flarum-best-answer.forum.best_answer') }));
+            items.add('bestAnswer', m(Badge, {
+                type: 'bestAnswer',
+                icon: 'check',
+                label: app.translator.trans('flarum-best-answer.forum.best_answer')
+            }));
         }
     });
 }
