@@ -2,8 +2,9 @@
 
 namespace WiwatSrt\BestAnswer\Listener;
 
-use Flarum\Event\PostWasDeleted;
 use Flarum\Event\PostWillBeSaved;
+use Flarum\Event\PostWasHidden;
+use Flarum\Event\PostWasRestored;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SelectBestAnswers
@@ -14,7 +15,8 @@ class SelectBestAnswers
     public function subscribe(Dispatcher $events)
     {
         $events->listen(PostWillBeSaved::class, [$this, 'whenPostWillBeSaved']);
-        $events->listen(PostWasDeleted::class, [$this, 'whenPostWasDeleted']);
+        $events->listen(PostWasHidden::class, [$this, 'whenPostWasHidden']);
+        $events->listen(PostWasRestored::class, [$this, 'whenPostWasRestored']);
     }
 
     /**
@@ -48,18 +50,34 @@ class SelectBestAnswers
     }
 
     /**
-     * @param PostWasDeleted $event
+     * @param PostWasHidden $event
      */
-    public function whenPostWasDeleted(PostWasDeleted $event)
+    public function whenPostWasHidden(PostWasHidden $event)
     {
         $post = $event->post;
-        $data = $event->data;
 
-        if ($post->exists && isset($data['attributes']['isBestAnswer'])) {
-            $isBestAnswer = (bool) $data['attributes']['isBestAnswer'];
+        if ($post->exists) {
+            $isBestAnswer = (bool) $post->is_best_answer;
 
             if ($isBestAnswer) {
                 $post->discussion->has_best_answer = false;
+                $post->discussion->save();
+            }
+        }
+    }
+
+    /**
+     * @param PostWasRestored $event
+     */
+    public function whenPostWasRestored(PostWasRestored $event)
+    {
+        $post = $event->post;
+
+        if ($post->exists) {
+            $isBestAnswer = (bool) $post->is_best_answer;
+
+            if ($isBestAnswer) {
+                $post->discussion->has_best_answer = true;
                 $post->discussion->save();
             }
         }
