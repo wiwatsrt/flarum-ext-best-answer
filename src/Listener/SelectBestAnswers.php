@@ -2,9 +2,9 @@
 
 namespace WiwatSrt\BestAnswer\Listener;
 
+use Flarum\Event\DiscussionWillBeSaved;
 use Flarum\Event\PostWillBeSaved;
 use Flarum\Event\PostWasHidden;
-use Flarum\Event\PostWasRestored;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SelectBestAnswers
@@ -14,9 +14,9 @@ class SelectBestAnswers
      */
     public function subscribe(Dispatcher $events)
     {
+        $events->listen(DiscussionWillBeSaved::class, [$this, 'whenDiscussionWillBeSaved']);
         $events->listen(PostWillBeSaved::class, [$this, 'whenPostWillBeSaved']);
         $events->listen(PostWasHidden::class, [$this, 'whenPostWasHidden']);
-        $events->listen(PostWasRestored::class, [$this, 'whenPostWasRestored']);
     }
 
     /**
@@ -27,25 +27,38 @@ class SelectBestAnswers
         $post = $event->post;
         $data = $event->data;
 
-        if ($post->exists && isset($data['attributes']['isBestAnswer']) && $post->number !== 1) {
+        if ($post->exists && isset($data['attributes']['isBestAnswer'])) {
             $isBestAnswer = (bool) $data['attributes']['isBestAnswer'];
 
             if ($isBestAnswer) {
-                // Remove other best answer in same discussion
-                $post->where([
-                    'discussion_id' => $post->discussion->id,
-                    'is_best_answer' => 1
-                ])->update(['is_best_answer' => 0]);
-
-                $post->discussion->has_best_answer = true;
+                $post->discussion->best_answer_post_id = $post->id;
                 $post->discussion->save();
             } else {
-                $post->discussion->has_best_answer = false;
+                $post->discussion->best_answer_post_id = 0;
                 $post->discussion->save();
             }
+        }
+    }
 
-            $post->is_best_answer = $isBestAnswer;
-            $post->save();
+    /**
+     * @param DiscussionWillBeSaved $event
+     */
+    public function whenDiscussionWillBeSaved(DiscussionWillBeSaved $event)
+    {
+        $discussion = $event->discussion;
+        $data = $event->data;
+
+        if ($discussion->exists && isset($data['attributes']['hasBestAnswerPost'])) {
+            $hasBestAnswerPost = (bool) $data['attributes']['hasBestAnswerPost'];
+            $bestAnswerPostId = $data['attributes']['bestAnswerPostId'];
+
+            if ($hasBestAnswerPost) {
+                $discussion->best_answer_post_id = $bestAnswerPostId;
+            } else {
+                $discussion->best_answer_post_id = 0;
+            }
+
+            $discussion->save();
         }
     }
 
@@ -57,27 +70,8 @@ class SelectBestAnswers
         $post = $event->post;
 
         if ($post->exists) {
-            $isBestAnswer = (bool) $post->is_best_answer;
-
-            if ($isBestAnswer) {
-                $post->discussion->has_best_answer = false;
-                $post->discussion->save();
-            }
-        }
-    }
-
-    /**
-     * @param PostWasRestored $event
-     */
-    public function whenPostWasRestored(PostWasRestored $event)
-    {
-        $post = $event->post;
-
-        if ($post->exists) {
-            $isBestAnswer = (bool) $post->is_best_answer;
-
-            if ($isBestAnswer) {
-                $post->discussion->has_best_answer = true;
+            if ($post->discussion->best_answer_post_id == $post->id) {
+                $post->discussion->best_answer_post_id = 0;
                 $post->discussion->save();
             }
         }
