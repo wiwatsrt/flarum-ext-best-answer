@@ -55,14 +55,8 @@ class AddBestAnswerRelationship
     {
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canSelectBestAnswer'] = (bool) $event->actor->can('canSelectBestAnswer', $event->model);
-            $event->attributes['hasBestAnswerPost'] = (bool)($event->model->bestAnswerPost) ? true : false;
             $event->attributes['startUserId'] = $event->model->start_user_id;
-            $event->attributes['bestAnswerPostId'] = $event->model->best_answer_post_id;
         }
-
-        /*if ($event->isSerializer(PostSerializer::class)) {
-            $event->attributes['isBestAnswer'] = (bool)($event->model->discussion->bestAnswerPost() == $event->model) ? true : false;
-        }*/
     }
 
     /**

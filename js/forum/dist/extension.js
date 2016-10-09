@@ -20,10 +20,8 @@ System.register('wiwatSrt/bestAnswer/addBestAnswerAction', ['flarum/extend', 'fl
                 className: 'Button Button--link',
                 onclick: function onclick() {
                     isBestAnswer = !isBestAnswer;
-                    //post.save({isBestAnswer: isBestAnswer});
                     discussion.save({
                         bestAnswerPostId: isBestAnswer ? post.id() : 0,
-                        hasBestAnswerPost: isBestAnswer,
                         relationships: isBestAnswer ? {bestAnswerPost: post} : delete discussion.data.relationships.bestAnswerPost
                     }).then(() => {
                         if (app.current instanceof DiscussionPage) {
@@ -31,11 +29,9 @@ System.register('wiwatSrt/bestAnswer/addBestAnswerAction', ['flarum/extend', 'fl
                         }
                         m.redraw();
                     });
-                    m.route(app.route.post(discussion.posts()[0]));
-                    /*discussion.pushAttributes({
-                        hasBestAnswerPost: isBestAnswer,
-                        bestAnswerPostId: isBestAnswer ? post.id() : 0,
-                    });*/
+                    if(isBestAnswer) {
+                        m.route(app.route.post(discussion.posts()[0]));
+                    }
                 }
             }));
         });
@@ -100,7 +96,7 @@ System.register('wiwatSrt/bestAnswer/addBadgeBestAnswer', ['flarum/extend', 'fla
     var extend, app, Discussion, Badge;
     _export('default', function () {
         extend(Discussion.prototype, 'badges', function (items) {
-            if (this.hasBestAnswerPost() && !items.has('hidden')) {
+            if (this.bestAnswerPost() && !items.has('hidden')) {
                 items.add('bestAnswer', m(Badge, {
                     type: 'bestAnswer',
                     icon: 'check',
@@ -126,24 +122,16 @@ System.register('wiwatSrt/bestAnswer/addBadgeBestAnswer', ['flarum/extend', 'fla
 });
 'use strict';
 
-System.register('wiwatSrt/bestAnswer/addBestAnswerFirstPost', ['flarum/app', 'flarum/extend', 'flarum/components/CommentPost', 'flarum/components/PostMeta', 'flarum/components/PostPreview', 'flarum/helpers/icon', 'flarum/helpers/username', 'flarum/helpers/userOnline'], function (_export, _context) {
+System.register('wiwatSrt/bestAnswer/addBestAnswerFirstPost', ['flarum/app', 'flarum/extend', 'flarum/components/CommentPost', 'flarum/components/PostMeta', 'flarum/helpers/icon', 'flarum/helpers/username', 'flarum/helpers/userOnline'], function (_export, _context) {
     "use strict";
 
-    var app, extend, icon, username, userOnline, CommentPost, PostMeta, PostPreview;
+    var app, extend, icon, username, userOnline, CommentPost, PostMeta;
     function addBestAnswerFirstPost() {
         extend(CommentPost.prototype, 'footerItems', function (items) {
 
             var discussion = this.props.post.discussion();
 
             if (discussion.bestAnswerPost() && this.props.post.number() == 1 && !this.props.post.isHidden()) {
-                /*items.add('bestAnswerPost', PostPreview.component({
-                    post: discussion.bestAnswerPost()
-                }), -100);
-                */
-                /*items.add('bestAnswerPost', CommentPost.component({
-                    post: discussion.bestAnswerPost()
-                }), -100);*/
-                //var post = discussion.attribute('bestAnswerPost');
                 var post = discussion.bestAnswerPost();
                 if (post.isHidden()) return;
                 var user = discussion.bestAnswerPost().user();
@@ -199,8 +187,6 @@ System.register('wiwatSrt/bestAnswer/addBestAnswerFirstPost', ['flarum/app', 'fl
             CommentPost = _flarumComponentsCommentPost.default;
         }, function (_flarumComponentsPostMeta) {
             PostMeta = _flarumComponentsPostMeta.default;
-        }, function (_flarumComponentsPostPreview) {
-            PostPreview = _flarumComponentsPostPreview.default;
         }, function (_flarumHelpersIcon) {
             icon = _flarumHelpersIcon.default;
         }, function (_flarumHelpersUsername) {
@@ -213,10 +199,10 @@ System.register('wiwatSrt/bestAnswer/addBestAnswerFirstPost', ['flarum/app', 'fl
 });
 'use strict';
 
-System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'flarum/models/Post', 'wiwatSrt/bestAnswer/addBestAnswerAction', 'wiwatSrt/bestAnswer/addBestAnswerAttribute', 'wiwatSrt/bestAnswer/addBadgeBestAnswer', 'wiwatSrt/bestAnswer/addBestAnswerFirstPost'], function (_export, _context) {
+System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'flarum/Model', 'flarum/models/Discussion', 'wiwatSrt/bestAnswer/addBestAnswerAction', 'wiwatSrt/bestAnswer/addBestAnswerAttribute', 'wiwatSrt/bestAnswer/addBadgeBestAnswer', 'wiwatSrt/bestAnswer/addBestAnswerFirstPost'], function (_export, _context) {
     "use strict";
 
-    var app, extend, Model, Discussion, Post, addBestAnswerAction, addBestAnswerAttribute, addBadgeBestAnswer, addBestAnswerFirstPost;
+    var app, extend, Model, Discussion, addBestAnswerAction, addBestAnswerAttribute, addBadgeBestAnswer, addBestAnswerFirstPost;
 
     return {
         setters: [function (_flarumApp) {
@@ -225,8 +211,6 @@ System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'fla
             extend = _flarumExtend.extend;
         }, function (_flarumModelsDiscussion) {
             Discussion = _flarumModelsDiscussion.default;
-        }, function (_flarumModelsPost) {
-            Post = _flarumModelsPost.default;
         }, function (_flarumModel) {
             Model = _flarumModel.default;
         }, function (_wiwatSrtBestAnswerAddBestAnswerAction) {
@@ -243,7 +227,6 @@ System.register('wiwatSrt/bestAnswer/main', ['flarum/app', 'flarum/extend', 'fla
             app.initializers.add('wiwatSrt-bestAnswer', function () {
                 Discussion.prototype.bestAnswerPost = Model.hasOne('bestAnswerPost');
                 Discussion.prototype.canSelectBestAnswer = Model.attribute('canSelectBestAnswer');
-                Discussion.prototype.hasBestAnswerPost = Model.attribute('hasBestAnswerPost');
 
                 addBestAnswerAction();
                 addBestAnswerAttribute();
