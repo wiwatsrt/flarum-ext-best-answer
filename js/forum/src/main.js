@@ -1,11 +1,18 @@
 import app from 'flarum/app';
 import { extend } from 'flarum/extend';
-import addBadgeBestAnswer from 'wiwatsrt/best-answer/addBadgeBestAnswer';
-import addBestAnswerAttribute from 'wiwatsrt/best-answer/addBestAnswerAttribute';
-import addBestAnswerAction from 'wiwatsrt/best-answer/addBestAnswerAction';
+import Discussion from 'flarum/models/Discussion';
+import Model from 'flarum/Model';
+import addBestAnswerAction from 'wiwatSrt/bestAnswer/addBestAnswerAction';
+import addBestAnswerAttribute from 'wiwatSrt/bestAnswer/addBestAnswerAttribute';
+import addBestAnswerBadge from 'wiwatSrt/bestAnswer/addBestAnswerBadge';
+import addBestAnswerFirstPost from 'wiwatSrt/bestAnswer/addBestAnswerFirstPost';
 
 app.initializers.add('wiwatSrt-bestAnswer', function() {
-    addBadgeBestAnswer();
-    addBestAnswerAttribute();
+    Discussion.prototype.bestAnswerPost = Model.hasOne('bestAnswerPost');
+    Discussion.prototype.canSelectBestAnswer = Model.attribute('canSelectBestAnswer');
+
     addBestAnswerAction();
+    addBestAnswerAttribute();
+    addBestAnswerBadge();
+    addBestAnswerFirstPost();
 });

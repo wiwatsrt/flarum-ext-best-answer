@@ -1,11 +1,11 @@
 import app from 'flarum/app';
 import { extend } from 'flarum/extend';
-import Discussion from 'flarum/models/Discussion';
 import Badge from 'flarum/components/Badge';
+import Discussion from 'flarum/models/Discussion';
 
 export default function() {
     extend(Discussion.prototype, 'badges', function (items) {
-        if (this.attribute('hasBestAnswer') && !items.has('hidden')) {
+        if (this.bestAnswerPost() && !items.has('hidden')) {
             items.add('bestAnswer', m(Badge, {
                 type: 'bestAnswer',
                 icon: 'check',
