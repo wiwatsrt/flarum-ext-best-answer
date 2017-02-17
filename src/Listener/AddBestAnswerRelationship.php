@@ -64,7 +64,7 @@ class AddBestAnswerRelationship
      */
     public function includeBestAnswerPost(ConfigureApiController $event)
     {
-        if ($event->isController(Controller\ShowDiscussionController::class)) {
+        if ($event->isController(Controller\ListDiscussionsController::class) || $event->isController(Controller\ShowDiscussionController::class)) {
             $event->addInclude('bestAnswerPost');
         }
     }
