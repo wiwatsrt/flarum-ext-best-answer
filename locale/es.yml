@@ -3,10 +3,10 @@ flarum-best-answer:
         permissions:
             best_answer: => flarum-best-answer.ref.best_answer
     forum:
-        this_best_answer: "Esta es la mejor respuesta"
+        this_best_answer: "Marcar como mejor respuesta"
         remove_best_answer: "Remover la respuesta actual"
         header_best_answer: "Marcada por el dueño de la discusión como mejor respuesta"
-        best_answer_button: "Marcar como mejor respuesta"
+        best_answer_button: => flarum-best-answer.ref.best_answer
         best_answer: => flarum-best-answer.ref.best_answer
     ref:
       best_answer: 'Mejor respuesta'
