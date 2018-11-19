@@ -2,7 +2,7 @@
 
 namespace WiwatSrt\BestAnswer\Listener;
 
-use Flarum\Event\DiscussionWillBeSaved;
+use Flarum\Discussion\Event\Saving;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class SelectBestAnswers
@@ -12,18 +12,18 @@ class SelectBestAnswers
      */
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(DiscussionWillBeSaved::class, [$this, 'whenDiscussionWillBeSaved']);
+        $events->listen(Saving::class, [$this, 'whenSaving']);
     }
 
     /**
-     * @param DiscussionWillBeSaved $event
+     * @param Saving $event
      */
-    public function whenDiscussionWillBeSaved(DiscussionWillBeSaved $event)
+    public function whenSaving(Saving $event)
     {
         $discussion = $event->discussion;
         $data = $event->data;
 
-        if ($discussion->exists && isset($data['attributes']['bestAnswerPostId'])) {
+        if ($discussion->exists && isset($data['attributes']['bestAnswerPostId']) && $event->actor->id === $event->discussion->user_id) {
             $bestAnswerPostId = $data['attributes']['bestAnswerPostId'];
             $discussion->best_answer_post_id = $bestAnswerPostId;
             $discussion->save();
