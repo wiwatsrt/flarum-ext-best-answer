@@ -42,7 +42,7 @@ export default function() {
                                     config: m.route,
                                     'data-number': post.number()
                                 },
-                                icon('check'),
+                                icon('fas fa-check'),
                                 app.translator.trans('flarum-best-answer.forum.best_answer_button')
                             )
                         )

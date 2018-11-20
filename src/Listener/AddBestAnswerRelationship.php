@@ -5,12 +5,12 @@ namespace WiwatSrt\BestAnswer\Listener;
 use Flarum\Api\Controller;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Api\Serializer\PostSerializer;
-use Flarum\Core\Discussion;
-use Flarum\Core\Post;
-use Flarum\Event\ConfigureApiController;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
+use Flarum\Api\Event\WillGetData;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
-use Flarum\Event\PrepareApiAttributes;
+use Flarum\Api\Event\Serializing;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddBestAnswerRelationship
@@ -22,8 +22,8 @@ class AddBestAnswerRelationship
     {
         $events->listen(GetModelRelationship::class, [$this, 'getModelRelationship']);
         $events->listen(GetApiRelationship::class, [$this, 'getApiAttributes']);
-        $events->listen(PrepareApiAttributes::class, [$this, 'prepareApiAttributes']);
-        $events->listen(ConfigureApiController::class, [$this, 'includeBestAnswerPost']);
+        $events->listen(Serializing::class, [$this, 'prepareApiAttributes']);
+        $events->listen(WillGetData::class, [$this, 'includeBestAnswerPost']);
     }
 
     /**
@@ -49,20 +49,20 @@ class AddBestAnswerRelationship
     }
 
     /**
-     * @param PrepareApiAttributes $event
+     * @param Serializing $event
      */
-    public function prepareApiAttributes(PrepareApiAttributes $event)
+    public function prepareApiAttributes(Serializing $event)
     {
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canSelectBestAnswer'] = (bool) $event->actor->can('selectBestAnswer', $event->model);
-            $event->attributes['startUserId'] = $event->model->start_user_id;
+            $event->attributes['startUserId'] = $event->model->user_id;
         }
     }
 
     /**
-     * @param ConfigureApiController $event
+     * @param WillGetData $event
      */
-    public function includeBestAnswerPost(ConfigureApiController $event)
+    public function includeBestAnswerPost(WillGetData $event)
     {
         if ($event->isController(Controller\ListDiscussionsController::class) || $event->isController(Controller\ShowDiscussionController::class)) {
             $event->addInclude('bestAnswerPost');

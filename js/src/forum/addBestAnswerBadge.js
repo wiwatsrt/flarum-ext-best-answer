@@ -8,7 +8,7 @@ export default function() {
         if (this.bestAnswerPost() && !items.has('hidden')) {
             items.add('bestAnswer', m(Badge, {
                 type: 'bestAnswer',
-                icon: 'check',
+                icon: 'fas fa-check',
                 label: app.translator.trans('flarum-best-answer.forum.best_answer')
             }));
         }

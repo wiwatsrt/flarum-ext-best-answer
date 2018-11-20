@@ -5,7 +5,7 @@ import PermissionGrid from 'flarum/components/PermissionGrid';
 app.initializers.add('wiwatSrt-bestAnswer', () => {
     extend(PermissionGrid.prototype, 'replyItems', function (items) {
         items.add('selectBestAnswer', {
-            icon: 'comment-o',
+            icon: 'far fa-comment',
             label: app.translator.trans('flarum-best-answer.admin.permissions.best_answer'),
             permission: 'discussion.selectBestAnswer'
         });
