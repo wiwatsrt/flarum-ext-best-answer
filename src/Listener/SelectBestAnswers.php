@@ -24,8 +24,7 @@ class SelectBestAnswers
         $data = $event->data;
 
         if ($discussion->exists && isset($data['attributes']['bestAnswerPostId']) && $event->actor->id === $event->discussion->user_id) {
-            $bestAnswerPostId = $data['attributes']['bestAnswerPostId'];
-            $discussion->best_answer_post_id = $bestAnswerPostId;
+            $discussion->best_answer_post_id = $data['attributes']['bestAnswerPostId'];
             $discussion->save();
         }
     }

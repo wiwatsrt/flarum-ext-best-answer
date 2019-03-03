@@ -8,11 +8,12 @@ export default function() {
     extend(CommentPost.prototype, 'actionItems', function (items) {
         var post = this.props.post;
         var discussion = this.props.post.discussion();
+        var isBestAnswer = (discussion.bestAnswerPost() && discussion.bestAnswerPost() == post);
+
+        post.pushAttributes({isBestAnswer});
 
         if (post.isHidden() || !discussion.canSelectBestAnswer() || !app.session.user || discussion.attribute('startUserId') != app.session.user.id()) return;
-
-        var isBestAnswer = (discussion.bestAnswerPost() && discussion.bestAnswerPost() == post);
-        post.pushAttributes({isBestAnswer});
+        if (!isBestAnswer && !discussion.canSelectBestAnswerOwnPost() && discussion.attribute('startUserId') == post.data.relationships.user.data.id) return;
 
         items.add('bestAnswer', Button.component({
             children: app.translator.trans(isBestAnswer ? 'flarum-best-answer.forum.remove_best_answer' : 'flarum-best-answer.forum.this_best_answer'),

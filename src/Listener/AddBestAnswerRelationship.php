@@ -11,10 +11,21 @@ use Flarum\Api\Event\WillGetData;
 use Flarum\Event\GetApiRelationship;
 use Flarum\Event\GetModelRelationship;
 use Flarum\Api\Event\Serializing;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class AddBestAnswerRelationship
 {
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    protected $settings;
+
+    public function __construct(SettingsRepositoryInterface $settings)
+    {
+        $this->settings = $settings;
+    }
+
     /**
      * @param Dispatcher $events
      */
@@ -55,6 +66,7 @@ class AddBestAnswerRelationship
     {
         if ($event->isSerializer(DiscussionSerializer::class)) {
             $event->attributes['canSelectBestAnswer'] = (bool) $event->actor->can('selectBestAnswer', $event->model);
+            $event->attributes['canSelectBestAnswerOwnPost'] = (bool) $this->settings->get('flarum-best-answer.allow_select_own_post');
             $event->attributes['startUserId'] = $event->model->user_id;
         }
     }
