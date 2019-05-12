@@ -3,6 +3,7 @@
 use Flarum\Extend;
 use Illuminate\Contracts\Events\Dispatcher;
 use WiwatSrt\BestAnswer\Listener;
+use WiwatSrt\BestAnswer\Access;
 
 return [
     (new Extend\Frontend('admin'))
@@ -17,5 +18,7 @@ return [
     function (Dispatcher $events) {
         $events->subscribe(Listener\SelectBestAnswers::class);
         $events->subscribe(Listener\AddBestAnswerRelationship::class);
+
+        $events->subscribe(Access\DiscussionPolicy::class);
     },
 ];

@@ -4,6 +4,7 @@ namespace WiwatSrt\BestAnswer\Listener;
 
 use Flarum\Discussion\Event\Saving;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class SelectBestAnswers
 {
@@ -22,10 +23,11 @@ class SelectBestAnswers
     {
         $discussion = $event->discussion;
         $data = $event->data;
+        $id = (int) Arr::get($data, 'attributes.bestAnswerPostId');
 
-        if ($discussion->exists && isset($data['attributes']['bestAnswerPostId']) && $event->actor->id === $event->discussion->user_id) {
-            $discussion->best_answer_post_id = $data['attributes']['bestAnswerPostId'];
-            $discussion->save();
+        if ($discussion->exists && isset($id) && $event->actor->can('selectBestAnswerInDiscussion', $discussion)) {
+            $discussion->best_answer_post_id = $id;
+            $discussion->best_answer_user_id = $event->actor->id;
         }
     }
 }
