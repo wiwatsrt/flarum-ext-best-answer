@@ -5,6 +5,7 @@ import addBestAnswerAction from './addBestAnswerAction';
 import addBestAnswerAttribute from './addBestAnswerAttribute';
 import addBestAnswerBadge from './addBestAnswerBadge';
 import addBestAnswerFirstPost from './addBestAnswerFirstPost';
+import addBestAnswerNotification from './addBestAnswerNotification';
 
 app.initializers.add('wiwatSrt-bestAnswer', function() {
     Discussion.prototype.bestAnswerPost = Model.hasOne('bestAnswerPost');
@@ -17,4 +18,5 @@ app.initializers.add('wiwatSrt-bestAnswer', function() {
     addBestAnswerAttribute();
     addBestAnswerBadge();
     addBestAnswerFirstPost();
+    addBestAnswerNotification();
 });
