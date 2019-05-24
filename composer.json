@@ -11,8 +11,7 @@
     }
   ],
   "require": {
-    "flarum/core": "^0.1.0-beta.9",
-    "flagrow/console": "dev-master"
+    "flarum/core": "^0.1.0-beta.8"
   },
   "autoload": {
     "psr-4": {

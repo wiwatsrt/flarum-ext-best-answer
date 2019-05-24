@@ -7,45 +7,51 @@ import username from 'flarum/helpers/username';
 import userOnline from 'flarum/helpers/userOnline';
 
 export default function() {
-    extend(CommentPost.prototype, 'footerItems', function(items) {
-        const thisPost = this.props.post;
-        const discussion = thisPost.discussion();
+    extend(CommentPost.prototype, 'footerItems', function (items) {
 
-        if (discussion.bestAnswerPost() && thisPost.number() === 1 && !thisPost.isHidden()) {
-            const post = discussion.bestAnswerPost();
+        var discussion = this.props.post.discussion();
 
+        if (discussion.bestAnswerPost() && this.props.post.number() == 1 && !this.props.post.isHidden()) {
+            var post = discussion.bestAnswerPost();
             if (post.isHidden()) return;
-
-            const user = post.user();
-
-            items.add(
-                'bestAnswerPost',
-                <div className="CommentPost">
-                    <div className="Post-header">
-                        <ul>
-                            <li className="item-user">
-                                <div className="PostUser">
-                                    {userOnline(user)}
-                                    <h3>
-                                        <a href={app.route.user(user)} config={m.route}>
-                                            {username(user)}
-                                        </a>
-                                    </h3>
-                                </div>
-                            </li>
-                            <li className="item-meta">{PostMeta.component({ post })}</li>
-                            <li className="item-bestAnswerButton">
-                                <a href={app.route.post(post)} config={m.route} data-number={post.number()}>
-                                    {icon('fas fa-check')}
-                                    {app.translator.trans('flarum-best-answer.forum.best_answer_button', { user: discussion.bestAnswerUser() })}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="Post-body">{m.trust(post.contentHtml())}</div>
-                </div>,
-                -10
-            );
+            var user = discussion.bestAnswerPost().user();
+            items.add('bestAnswerPost', m(
+                'div',
+                {className: 'CommentPost'},
+                m(".Post-header",
+                    m('ul',
+                        m('li',
+                            {className: 'item-user'},
+                            m('.PostUser',
+                                userOnline(user),
+                                m('h3',
+                                    m(
+                                        'a',
+                                        {href: app.route.user(user), config: m.route},
+                                        username(user)
+                                    )
+                                )
+                            )
+                        ), m('li',
+                            {className: 'item-meta'},
+                            PostMeta.component({post})
+                        ), m('li',
+                            {className: 'item-bestAnswerButton'}, m('a',
+                                {
+                                    href: app.route.post(post),
+                                    config: m.route,
+                                    'data-number': post.number()
+                                },
+                                icon('fas fa-check'),
+                                app.translator.trans('flarum-best-answer.forum.best_answer_button')
+                            )
+                        )
+                    )
+                ),
+                m(".Post-body",
+                    m.trust(discussion.bestAnswerPost().contentHtml())
+                )
+            ), -10);
         }
     });
 }
