@@ -2,6 +2,9 @@ flarum-best-answer:
     admin:
         permissions:
             best_answer: => flarum-best-answer.ref.best_answer
+        settings:
+            title: "Best Answer Settings"
+            allow_select_own_post: "Allow user can select own post"
     forum:
         this_best_answer: "Das ist die beste Antwort"
         remove_best_answer: "Entferne die aktuell beste Antwort"
