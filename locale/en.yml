@@ -11,7 +11,8 @@ flarum-best-answer:
         this_best_answer: "This is the best answer"
         remove_best_answer: "Remove the current best answer"
         header_best_answer: "Tagged by the post creator as the best answer"
-        best_answer_button: Best Answer ({username})
+        best_answer_button: Best Answer
+        best_answer_label: set by <a>{username}</a>
         best_answer: => flarum-best-answer.ref.best_answer
 
         notification:
