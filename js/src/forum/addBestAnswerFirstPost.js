@@ -34,11 +34,18 @@ export default function() {
                                 </div>
                             </li>
                             <li className="item-meta">{PostMeta.component({ post })}</li>
-                            <li className="item-bestAnswerButton">
+                            <li className="Post--BestAnswer">
                                 <a href={app.route.post(post)} config={m.route} data-number={post.number()}>
                                     {icon('fas fa-check')}
-                                    {app.translator.trans('flarum-best-answer.forum.best_answer_button', { user: discussion.bestAnswerUser() })}
+                                    {app.translator.trans('flarum-best-answer.forum.best_answer_button')}
                                 </a>
+
+                                <span className="BestAnswer--User">
+                                    {app.translator.trans('flarum-best-answer.forum.best_answer_label', {
+                                        user: discussion.bestAnswerUser(),
+                                        a: <a onclick={() => m.route(app.route.user(discussion.bestAnswerUser()))} />
+                                    })}
+                                </span>
                             </li>
                         </ul>
                     </div>
