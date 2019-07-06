@@ -1,0 +1,21 @@
+flarum-best-answer:
+    admin:
+        permissions:
+            best_answer: ベストアンサーを選ぶ(自分の投稿のみ)
+            best_answer_not_own_discussion: ベストアンサーを選ぶ(他人の投稿)
+        settings:
+            title: ベストアンサー設定
+            allow_select_own_post: ユーザーが自身の投稿をベストアンサーにすることを許可する
+            select_best_answer_reminder_days: X日後にベストアンサーを選ぶように通知する
+    forum:
+        this_best_answer: ベストアンサーに選ぶ
+        remove_best_answer: 現在のベストアンサーを消す
+        header_best_answer: 投稿者によってベストアンサーに選ばれました
+        best_answer_button: ベストアンサー
+        best_answer_label: <a>{username}</a>がつけました
+        best_answer: => flarum-best-answer.ref.best_answer
+
+        notification:
+            content: あなたの質問に回答がついている場合、ベストアンサーを選んで下さい
+    ref:
+      best_answer: ベストアンサー

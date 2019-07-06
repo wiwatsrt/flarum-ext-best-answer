@@ -1,22 +1,7 @@
-.Post--bestAnswer {
-  .item-isBestAnswer {
-    background: #58a400;
-    float: right;
-    border: 0 none !important;
-    border-radius: 4px;
-    color: white;
-    padding: 2px 5px;
-  }
-  .item-isBestAnswer::before {
-    content: "\f00c";
-    font-family: Font Awesome\ 5 Free;
-    font-weight: 900;
-    padding-right: 4px;
-  }
-}
 .Badge--bestAnswer {
   background-color: #58a400;
 }
+
 .Post-footer{
   .item-bestAnswerPost {
     padding: 10px;
@@ -28,20 +13,38 @@
       color: #111;
     }
 
-    a .icon {
-      display: inline-block;
-    }
-
     .PostUser-badges, .PostUser-avatar {
       display: none;
     }
-    .item-bestAnswerButton a {
-      background: #58a400;
-      float: right;
-      border: 0 none !important;
-      border-radius: 4px;
-      color: white;
-      padding: 2px 5px;
+
+    .Post--BestAnswer {
+      margin-right: 0;
+
+      a .icon {
+        display: inline-block;
+      }
     }
+  }
+}
+
+.Post--BestAnswer {
+  background: #58a400;
+  float: right;
+  border: 0 none !important;
+  border-radius: 4px;
+  padding: 2px 5px;
+
+  &, a {
+    color: white;
+  }
+
+  .icon {
+    margin-right: 5px;
+  }
+
+  .BestAnswer--User {
+    margin-left: 7.5px;
+    text-align: right;
+    font-size: .9em;
   }
 }

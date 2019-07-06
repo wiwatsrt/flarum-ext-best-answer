@@ -1,6 +1,6 @@
 <?php
 
-use Flagrow\Console\Extend\EnableConsole;
+use FoF\Console\Extend\EnableConsole;
 use Flarum\Extend;
 use Flarum\Foundation\Application;
 use Illuminate\Contracts\Events\Dispatcher;

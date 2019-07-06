@@ -2,7 +2,7 @@
 
 namespace WiwatSrt\BestAnswer\Provider;
 
-use Flagrow\Console\Providers\ConsoleProvider as Console;
+use FoF\Console\Providers\ConsoleProvider as Console;
 use Flarum\Foundation\AbstractServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 
