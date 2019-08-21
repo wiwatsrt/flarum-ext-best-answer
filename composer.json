@@ -1,5 +1,5 @@
 {
-  "name": "wiwatsrt/flarum-ext-best-answer",
+  "name": "giffgaff/flarum-ext-best-answer",
   "description": "Best Answer for Flarum.",
   "type": "flarum-extension",
   "keywords": ["flarum", "best-answer"],
