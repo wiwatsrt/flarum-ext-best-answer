@@ -76,8 +76,8 @@ class AddBestAnswerRelationship
     public function prepareApiAttributes(Serializing $event)
     {
         if ($event->isSerializer(DiscussionSerializer::class)) {
-            $event->attributes['canSelectBestAnswer'] = $event->actor->can('selectBestAnswerInDiscussion', $event->model);
-
+            $event->attributes['canSelectBestAnswer'] = $event->actor->can('selectBestAnswerNotOwnDiscussion', $event->model);
+            $event->attributes['canSelectBestAnswerOwnPost'] = $event->actor->can('selectBestAnswer', $event->model);
             $event->attributes['startUserId'] = $event->model->user_id;
             $event->attributes['firstPostId'] = $event->model->first_post_id;
         }
